@@ -16,6 +16,7 @@ contract MoodNft is ERC721 {
         SAD
     }
     mapping (uint256 => Mood) private s_tokenIdToMood;
+    
     constructor(string memory sadSvg, string memory happySvg) ERC721 ("Mood NFT","MN") {
         s_tokenCounter  = 0;
         s_sadSvgImgUri = sadSvg;
@@ -40,28 +41,31 @@ contract MoodNft is ERC721 {
                 Base64.encode(
                     bytes(
                         abi.encodePacked(
-                        '{"name: "',
-                        name(),
-                        '", description: "An NFT that reflects your mood!", "attributes": [{"trait_type": "Mood", "value": 100}], "image": ',
-                        imageURI,
-                        '"}'
+                            '{"name": "',
+                            name(),
+                            '", "description": "An NFT that reflects your mood!", "attributes": [{"trait_type": "Mood", "value": 100}], "image": "',
+                            imageURI,
+                            '"}'
                         )
                     )
                 )
             )
         );
+
     }
-    function flipMood(uint256 tokenId) public view {
+    function flipMood(uint256 tokenId) public  {
         if(getApproved(tokenId) != msg.sender && ownerOf(tokenId) != msg.sender){
             revert MoodNFT__CantFlipMoodIfNotOwner();
         }
 
         if(s_tokenIdToMood[tokenId] == Mood.HAPPY){
-            s_tokenIdToMood[tokenId] == Mood.SAD;
+            s_tokenIdToMood[tokenId] =Mood.SAD;
         } else{
-            s_tokenIdToMood[tokenId] == Mood.HAPPY;
+            s_tokenIdToMood[tokenId] = Mood.HAPPY;
         }
     }
-    
+     function _baseURI() internal pure override returns (string memory) {
+        return "data:application/json;base64,";
+    }
 }
 

@@ -8,8 +8,10 @@ contract BasicNft is ERC721{
     //Doogie ->NFT name
     //Dog    -> NFT symbol
     //Token counter
+    
     uint256 private s_tokenCounter = 0;
     mapping(uint256 => string) private s_tokenIdToUri;
+
     constructor() ERC721 ("Doogie","DOG"){
         s_tokenCounter = 0;
     }
@@ -18,6 +20,7 @@ contract BasicNft is ERC721{
         _safeMint(msg.sender,s_tokenCounter);
         s_tokenCounter++;
     }
+    
     function tokenURI(uint256 tokenId)public view override returns(string memory){
         return s_tokenIdToUri[tokenId];
     }
